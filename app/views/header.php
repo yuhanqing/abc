@@ -7,6 +7,7 @@
     <link rel="icon" href="../static/images/favicon.ico">
     <link href="../static/css/bootstrap.min.css" rel="stylesheet">
     <link href="../static/css/<?=$this->css?>.css" rel="stylesheet">
+    <script src="../static/js/<?=$this->css?>.js"></script>
     <script src="../static/js/jquery.min.js"></script>
     <script src="../static/js/bootstrap.min.js"></script>
     <title>管理系统后台操作</title>

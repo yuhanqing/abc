@@ -14,6 +14,7 @@ use app\base\Tool;
 class Manage
 {
     private $tpl;
+    private $id;
     private $username;
     private $password;
     private $email;
@@ -30,31 +31,57 @@ class Manage
     {
         switch ($_GET['action']) {
             case 'list':
-                $assign['list'] = true;
-                $assign['title'] = '管理员列表';
-                $assign['AllManages'] = Manage::getManage();
+                $assign['list']       = true;
+                $assign['title']      = '管理员列表';
+                $assign['allManages'] = $this->getManage();
                 break;
             case 'add':
                 if (isset($_POST['send'])) {
-                    $this->username  = $_POST['user_name'];
-                    $this->password  = sha1($_POST['user_pass']);
-                    $this->email     = $_POST['user_email'];
-                    $this->userLevel = $_POST['role_id'];
+                    $this->username  = $_POST['username'];
+                    $this->password  = sha1($_POST['userPass']);
+                    $this->email     = $_POST['userEmail'];
+                    $this->userLevel = $_POST['roleId'];
                     if ($this->addManage()) {
                         Tool::alertLocation('恭喜你，新增管理员成功！', 'manage.php?action=list');
                     } else {
                         Tool::alertBack('很遗憾，新增管理员失败！');
                     }
                 }
-                $assign['add'] = true;
+                $assign['add']   = true;
                 $assign['title'] = '新增管理员';
                 break;
             case 'update':
-                $assign['update'] = true;
-                $assign['title'] = '修改管理员';
+                if (isset($_POST['send'])) {
+                    $this->id        = $_POST['userId'];
+                    $this->password  = sha1($_POST['adminPass']);
+                    $this->email     = $_POST['userEmail'];
+                    $this->userLevel = $_POST['roleId'];
+                    $this->updateManage() ? Tool::alertLocation('恭喜你，修改管理员成功！', 'manage.php?action=list') :
+                                            Tool::alertBack('很遗憾，修改管理员失败！');
+                }
+                if (isset($_GET['id'])) {
+                    $this->id = $_GET['id'];
+                    is_array($this->getOneManage()) ? true : Tool::alertBack('管理员参数有误！');
+                    $assign['userId']   = $this->getOneManage()['user_id'];
+                    $assign['username'] = $this->getOneManage()['user_name'];
+                    $assign['roleId']   = $this->getOneManage()['role_id'];
+                    $assign['email']    = $this->getOneManage()['email'];
+                    $assign['update']   = true;
+                    $assign['title']    = '修改管理员';
+                } else {
+                    Tool::alertBack('非法操作！');
+                }
+
                 break;
             case 'delete':
-                $assign['delete'] = true;
+                if (isset($_GET['id'])) {
+                    $this->id = $_GET['id'];
+                    $this->deleteManage() ?
+                            Tool::alertLocation('恭喜你，删除管理员成功！', 'manage.php?action=list') :
+                            Tool::alertBack('很遗憾，删除管理员失败！');
+                } else {
+                    Tool::alertBack('非法操作！');
+                }
                 $assign['title'] = '删除管理员';
                 break;
             default:
@@ -63,7 +90,19 @@ class Manage
         $this->tpl->run($assign, 'manage.php');
     }
 
-    public static function getManage()
+    //查询单个管理员
+    public function getOneManage()
+    {
+        $db = DB::getDB();
+        $sql = "SELECT user_id,user_name,user_email,role_id FROM cms_users WHERE user_id='$this->id' LIMIT 1";
+        $result = $db->query($sql);
+        $array = $result->fetch_array(MYSQLI_ASSOC);
+        DB::unDB($result, $db);
+        return $array;
+    }
+
+    //查询所有管理员
+    public function getManage()
     {
         $db     = DB::getDB();
         $sql    = 'SELECT u.user_id,u.user_name,u.user_email,u.created_at,u.updated_at,r.role_name,r.role_sort
@@ -79,6 +118,7 @@ class Manage
         return $html;
     }
 
+    //添加管理员
     public function addManage()
     {
         $db  = DB::getDB();
@@ -90,11 +130,27 @@ class Manage
         return $affectedRows;
     }
 
+    //修改管理员
     public function updateManage()
     {
+        $db = DB::getDB();
+        $sql = "UPDATE cms_users 
+                  SET user_pass='$this->password',user_email='$this->email',role_id='$this->userLevel',updated_at=NOW()
+                  WHERE user_id='$this->id' 
+                  LIMIT 1";
+        $db->query($sql);
+        $affectedRows = $db->affected_rows;
+        DB::unDB($_result = null, $_db);
+        return $affectedRows;
     }
 
     public function deleteManage()
     {
+        $db = DB::getDB();
+        $sql ="DELETE FROM cms_users WHERE user_id='$this->id' LIMIT 1";
+        $db->query($sql);
+        $affectedRows = $db->affected_rows;
+        DB::unDB($result = null, $db);
+        return $affectedRows;
     }
 }
