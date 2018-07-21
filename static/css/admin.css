@@ -1,0 +1,24 @@
+@CHARSET "UTF-8";
+#sidebar dl {
+	padding:20px;
+	text-indent:2px;
+}
+#sidebar dl dt {
+	font-size:14px;
+	color:#3b6ea5;
+	font-weight:bold;
+	border-bottom:1px solid #ccc;
+	padding:5px 0 ;
+	margin:5px 0;
+}
+#sidebar dl dd {
+	height:22px;
+	line-height:22px;
+}
+#sidebar dl dd a {
+	color:#333;
+	text-decoration:none;
+}
+#sidebar dl dd a:hover {
+	text-decoration:underline;
+}
