@@ -47,7 +47,7 @@ class Template
         }
 
         include $header;
-        include $tplFile;
+        require $tplFile;
         include $footer;
     }
 

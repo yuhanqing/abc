@@ -6,4 +6,3 @@
     require ROOT_PATH . '/app/base/Template.php';
 
     $tpl = new \app\base\Template();
-    $assign = array();

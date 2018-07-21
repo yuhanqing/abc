@@ -1,7 +1,7 @@
 <?php
 
-use \app\models\Manage;
+use \app\controllers\ManageController;
 
 require '../config/kernel.php';
 
-new Manage($tpl);
+new ManageController($tpl);

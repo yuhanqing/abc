@@ -13,81 +13,22 @@ use app\base\Tool;
 
 class Manage
 {
-    private $tpl;
     private $id;
     private $username;
     private $password;
     private $email;
     private $userLevel;
 
-    public function __construct(&$tpl)
+    //拦截器(__set)
+    public function __set($key, $value)
     {
-        $this->tpl = $tpl;
-        $this->action();
+        $this->$key = $value;
     }
 
-    //业务流程控制器
-    private function action()
+    //拦截器(__get)
+    public function __get($key)
     {
-        switch ($_GET['action']) {
-            case 'list':
-                $assign['list']       = true;
-                $assign['title']      = '管理员列表';
-                $assign['allManages'] = $this->getManage();
-                break;
-            case 'add':
-                if (isset($_POST['send'])) {
-                    $this->username  = $_POST['username'];
-                    $this->password  = sha1($_POST['userPass']);
-                    $this->email     = $_POST['userEmail'];
-                    $this->userLevel = $_POST['roleId'];
-                    if ($this->addManage()) {
-                        Tool::alertLocation('恭喜你，新增管理员成功！', 'manage.php?action=list');
-                    } else {
-                        Tool::alertBack('很遗憾，新增管理员失败！');
-                    }
-                }
-                $assign['add']   = true;
-                $assign['title'] = '新增管理员';
-                break;
-            case 'update':
-                if (isset($_POST['send'])) {
-                    $this->id        = $_POST['userId'];
-                    $this->password  = sha1($_POST['adminPass']);
-                    $this->email     = $_POST['userEmail'];
-                    $this->userLevel = $_POST['roleId'];
-                    $this->updateManage() ? Tool::alertLocation('恭喜你，修改管理员成功！', 'manage.php?action=list') :
-                                            Tool::alertBack('很遗憾，修改管理员失败！');
-                }
-                if (isset($_GET['id'])) {
-                    $this->id = $_GET['id'];
-                    is_array($this->getOneManage()) ? true : Tool::alertBack('管理员参数有误！');
-                    $assign['userId']   = $this->getOneManage()['user_id'];
-                    $assign['username'] = $this->getOneManage()['user_name'];
-                    $assign['roleId']   = $this->getOneManage()['role_id'];
-                    $assign['email']    = $this->getOneManage()['email'];
-                    $assign['update']   = true;
-                    $assign['title']    = '修改管理员';
-                } else {
-                    Tool::alertBack('非法操作！');
-                }
-
-                break;
-            case 'delete':
-                if (isset($_GET['id'])) {
-                    $this->id = $_GET['id'];
-                    $this->deleteManage() ?
-                            Tool::alertLocation('恭喜你，删除管理员成功！', 'manage.php?action=list') :
-                            Tool::alertBack('很遗憾，删除管理员失败！');
-                } else {
-                    Tool::alertBack('非法操作！');
-                }
-                $assign['title'] = '删除管理员';
-                break;
-            default:
-                $assign['title'] = '非法操作';
-        }
-        $this->tpl->run($assign, 'manage.php');
+        return $this->$key;
     }
 
     //查询单个管理员
