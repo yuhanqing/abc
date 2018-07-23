@@ -15,6 +15,7 @@ class Manage extends Model
     private $password;
     private $email;
     private $userLevel;
+    private $limit;
 
     //拦截器(__set)
     public function __set($key, $value)
@@ -36,14 +37,21 @@ class Manage extends Model
         return parent::one($sql);
     }
 
+    //查询管理个数
+    public function getManageTotal()
+    {
+        $_sql = "SELECT COUNT(*) FROM cms_users";
+        return parent::total($_sql);
+    }
+
     //查询所有管理员
     public function getManage()
     {
 
-        $sql    = 'SELECT u.user_id,u.user_name,u.user_email,u.created_at,u.updated_at,r.role_name,r.role_sort
+        $sql    = "SELECT u.user_id,u.user_name,u.user_email,u.created_at,u.updated_at,r.role_name,r.role_sort
                     FROM cms_users AS u,cms_roles AS r 
                     WHERE u.role_id=r.role_id 
-                    ORDER BY r.role_sort ASC';
+                    ORDER BY r.role_sort ASC $this->limit";
         return parent::all($sql);
     }
 

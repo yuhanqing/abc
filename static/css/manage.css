@@ -28,6 +28,11 @@ body {
   color:#fff;
 }
 
+#page {
+  text-align:center;
+  padding:10px;
+}
+
 /*
  * Global add-ons
  */

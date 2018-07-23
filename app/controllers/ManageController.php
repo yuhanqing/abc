@@ -8,6 +8,7 @@
 
 namespace app\controllers;
 
+use app\base\Page;
 use app\models\Manage;
 use app\base\Tool;
 use app\base\Validate;
@@ -46,9 +47,12 @@ class ManageController extends Controller
 
     private function show()
     {
+        $page = new Page($this->model->getManageTotal(), PAGE_SIZE);
+        $this->model->limit = $page->limit;
         $this->assign['show']       = true;
         $this->assign['title']      = '管理员列表';
         $this->assign['allManages'] = $this->model->getManage();
+        $this->assign['page'] = $page->showPage();
     }
 
     private function add()
@@ -74,9 +78,6 @@ class ManageController extends Controller
             }
             if (Validate::checkNull($_POST['userEmail'])) {
                 Tool::alertBack('警告：邮箱不得为空！');
-            }
-            if (Validate::checkEmail($_POST['userEmail'])) {
-                Tool::alertBack('警告：邮箱格式不正确！');
             }
             $this->model->username  = $_POST['username'];
             if ($this->model->getOneManage()) {
@@ -107,9 +108,6 @@ class ManageController extends Controller
             }
             if (Validate::checkNull($_POST['userEmail'])) {
                 Tool::alertBack('警告：邮箱不得为空！');
-            }
-            if (Validate::checkEmail($_POST['userEmail'])) {
-                Tool::alertBack('警告：邮箱格式不正确！');
             }
             $this->model->id        = $_POST['userId'];
             $this->model->password  = sha1($_POST['userPass']);

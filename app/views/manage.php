@@ -32,7 +32,8 @@
                     <?php endforeach; ?>
                     </tbody>
                 </table>
-            <a class="btn btn-success" href="manage.php?action=add">新增</a>
+                <div id="page"><?php echo $this->vars['page'];?></div>
+                <a class="col-md-1 btn btn-success" href="manage.php?action=add">新增</a>
             <?php endif; ?>
 
             <?php if (isset($this->vars['add'])) :?>

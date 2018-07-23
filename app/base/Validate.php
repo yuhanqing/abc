@@ -48,16 +48,6 @@ class Validate
         }
     }
 
-    public static function checkEmail($date)
-    {
-        $mode = '\w[-\w.+]*@([A-Za-z0-9][-A-Za-z0-9]+\.)+[A-Za-z]{2,14}';
-        if (preg_match($mode, $date)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     public static function checkNum($date)
     {
         if (!is_numeric($date) && !strpos($date, '.')) {
