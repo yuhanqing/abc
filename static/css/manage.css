@@ -7,6 +7,26 @@ body {
   padding-top: 50px;
 }
 
+#main ol {
+  list-style-type:none;
+  padding:0 0 0 26px;
+  height:35px;
+}
+#main ol li {
+  float:left;
+  padding:0 10px 0 0;
+}
+#main ol li a {
+  padding:6px;
+  display:block;
+}
+#main ol li a:hover {
+  background:#eee;
+}
+#main ol li a.selected {
+  background:#3b6ea5;
+  color:#fff;
+}
 
 /*
  * Global add-ons
@@ -103,3 +123,4 @@ body {
   display: inline-block;
   border-radius: 50%;
 }
+

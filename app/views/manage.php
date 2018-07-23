@@ -2,9 +2,8 @@
     <div class="col-sm-9 col-md-10 main">
         <h2 class="page-header">管理首页 >> 管理员管理 >> <strong><?php echo $this->vars['title'];?></strong></h2>
 
-        <h3 class="sub-header">Section title</h3>
         <div class="table-responsive">
-            <?php if (isset($this->vars['list'])) :?>
+            <?php if (isset($this->vars['show'])) :?>
                 <table class="table table-hover">
                     <thead>
                     <tr>
@@ -39,28 +38,31 @@
             <?php if (isset($this->vars['add'])) :?>
                 <form method="post" class="col-md-6">
                     <div class="form-group">
-                        <label>Username</label>
-                        <input type="text" class="form-control" name="username" placeholder="Username">
+                        <label>Username(不得小于2位，长于20位)</label>
+                        <input type="text" class="form-control" name="username" placeholder="Username" />
                     </div>
                     <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" class="form-control" name="userPass" placeholder="Password">
+                        <label>Password()</label>
+                        <input type="password" class="form-control" name="userPass" placeholder="Password" />
+                    </div>
+                    <div class="form-group">
+                        <label>Check Password</label>
+                        <input type="password" class="form-control" name="checkPass" placeholder="Check Password" />
                     </div>
                     <div class="form-group">
                         <label>Email address</label>
-                        <input type="email" class="form-control" name="userEmail" placeholder="Email">
+                        <input type="email" class="form-control" name="userEmail" placeholder="Email" />
                     </div>
                     <div class="form-group">
                         <label>等级</label>
                         <select name="roleId" class="form-control">
-                            <option value="1">超级管理员</option>
-                            <option value="2">管理员</option>
-                            <option value="3">实习生</option>
-                            <option value="4">后台游客</option>
+                            <?php foreach ($this->vars['allLevel'] as $key => $value) : ?>
+                                <option value="<?=$value['role_id']?>"><?=$value['role_name']?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <input type="submit" name="send" value="新增管理员" class="submit btn btn-success" />
-                    <a class="btn btn-default" href="manage.php?action=list">返回列表</a>
+                    <a class="btn btn-default" href="manage.php?action=show">返回列表</a>
                 </form>
             <?php endif; ?>
 
@@ -84,14 +86,13 @@
                     <div class="form-group">
                         <label>等级</label>
                         <select name="roleId" class="form-control">
-                            <option value="1">超级管理员</option>
-                            <option value="2">普通管理员</option>
-                            <option value="3">实习生</option>
-                            <option value="4">后台游客</option>
+                            <?php foreach ($this->vars['allLevel'] as $key => $value) : ?>
+                                <option value="<?=$value['role_id']?>"><?=$value['role_name']?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <input type="submit" name="send" value="修改管理员" class="submit btn btn-success" />
-                    <a class="btn btn-default" href="manage.php?action=list">返回列表</a>
+                    <a class="btn btn-default" href="manage.php?action=show">返回列表</a>
                 </form>
             <?php endif; ?>
         </div>

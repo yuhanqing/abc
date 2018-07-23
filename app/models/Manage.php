@@ -70,4 +70,11 @@ class Manage extends Model
         $sql ="DELETE FROM cms_users WHERE user_id='$this->id' LIMIT 1";
         return parent::aud($sql);
     }
+
+    //查询所有的等级
+    public function getAllLevel()
+    {
+        $_sql = "SELECT role_id,role_name FROM cms_roles ORDER BY role_sort ASC";
+        return parent::all($_sql);
+    }
 }

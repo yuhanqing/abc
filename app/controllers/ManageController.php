@@ -8,8 +8,8 @@
 
 namespace app\controllers;
 
-use \app\models\Manage;
-use \app\base\Tool;
+use app\models\Manage;
+use app\base\Tool;
 
 class ManageController extends Controller
 {
@@ -25,7 +25,7 @@ class ManageController extends Controller
     private function action()
     {
         switch ($_GET['action']) {
-            case 'list':
+            case 'show':
                 $this->show();
                 break;
             case 'add':
@@ -44,7 +44,7 @@ class ManageController extends Controller
 
     private function show()
     {
-        $this->assign['list']       = true;
+        $this->assign['show']       = true;
         $this->assign['title']      = '管理员列表';
         $this->assign['allManages'] = $this->model->getManage();
     }
@@ -57,13 +57,14 @@ class ManageController extends Controller
             $this->model->email     = $_POST['userEmail'];
             $this->model->userLevel = $_POST['roleId'];
             if ($this->model->addManage()) {
-                Tool::alertLocation('恭喜你，新增管理员成功！', 'manage.php?action=list');
+                Tool::alertLocation('恭喜你，新增管理员成功！', 'manage.php?action=show');
             } else {
                 Tool::alertBack('很遗憾，新增管理员失败！');
             }
         }
         $this->assign['add']   = true;
         $this->assign['title'] = '新增管理员';
+        $this->assign['allLevel'] = $this->model->getAllLevel();
     }
 
     private function update()
@@ -73,7 +74,7 @@ class ManageController extends Controller
             $this->model->password  = sha1($_POST['adminPass']);
             $this->model->email     = $_POST['userEmail'];
             $this->model->userLevel = $_POST['roleId'];
-            $this->model->updateManage() ? Tool::alertLocation('恭喜你，修改管理员成功！', 'manage.php?action=list') :
+            $this->model->updateManage() ? Tool::alertLocation('恭喜你，修改管理员成功！', 'manage.php?action=show') :
                 Tool::alertBack('很遗憾，修改管理员失败！');
         }
         if (isset($_GET['id'])) {
@@ -85,6 +86,7 @@ class ManageController extends Controller
             $this->assign['email']    = $this->model->getOneManage()['email'];
             $this->assign['update']   = true;
             $this->assign['title']    = '修改管理员';
+            $this->assign['allLevel'] = $this->model->getAllLevel();
         } else {
             Tool::alertBack('非法操作！');
         }
@@ -95,7 +97,7 @@ class ManageController extends Controller
         if (isset($_GET['id'])) {
             $this->model->id = $_GET['id'];
             $this->model->deleteManage() ?
-                Tool::alertLocation('恭喜你，删除管理员成功！', 'manage.php?action=list') :
+                Tool::alertLocation('恭喜你，删除管理员成功！', 'manage.php?action=show') :
                 Tool::alertBack('很遗憾，删除管理员失败！');
         } else {
             Tool::alertBack('非法操作！');
