@@ -14,9 +14,8 @@ class Controller
     protected $model;
     protected $assign = array();
 
-    protected function __construct(&$tpl, &$model)
+    protected function __construct(&$tpl)
     {
         $this->tpl   = $tpl;
-        $this->model = $model;
     }
 }

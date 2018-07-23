@@ -30,7 +30,8 @@ class Role extends Model
     //查询单个
     public function getOneRole()
     {
-        $sql = "SELECT role_id,role_name,role_sort,role_description FROM cms_roles WHERE role_id='$this->id' LIMIT 1";
+        $sql = "SELECT role_id,role_name,role_sort,role_description FROM cms_roles 
+                 WHERE role_id='$this->id' OR role_name='$this->roleName' OR role_sort='$this->roleSort' LIMIT 1";
         return parent::one($sql);
     }
 

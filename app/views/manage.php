@@ -38,19 +38,19 @@
             <?php if (isset($this->vars['add'])) :?>
                 <form method="post" class="col-md-6">
                     <div class="form-group">
-                        <label>Username(不得小于2位，长于20位)</label>
+                        <label>Username(不得小于2位，大于20位)</label>
                         <input type="text" class="form-control" name="username" placeholder="Username" />
                     </div>
                     <div class="form-group">
-                        <label>Password()</label>
+                        <label>Password(不得小于6位)</label>
                         <input type="password" class="form-control" name="userPass" placeholder="Password" />
                     </div>
                     <div class="form-group">
-                        <label>Check Password</label>
+                        <label>Check Password(必须与密码一致)</label>
                         <input type="password" class="form-control" name="checkPass" placeholder="Check Password" />
                     </div>
                     <div class="form-group">
-                        <label>Email address</label>
+                        <label>Email address(填写正确的邮箱地址)</label>
                         <input type="email" class="form-control" name="userEmail" placeholder="Email" />
                     </div>
                     <div class="form-group">
@@ -61,7 +61,8 @@
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <input type="submit" name="send" value="新增管理员" class="submit btn btn-success" />
+                    <input type="submit" name="send" value="新增管理员" onclick="return checkAddForm();"
+                           class="submit btn btn-success" />
                     <a class="btn btn-default" href="manage.php?action=show">返回列表</a>
                 </form>
             <?php endif; ?>
@@ -71,22 +72,22 @@
                     <input type="hidden" value="<?=$this->vars['userId']?>" name="userId"/>
                     <input type="hidden" value="<?=$this->vars['roleId']?>" id="roleId"/>
                     <div class="form-group">
-                        <label>Username</label>
+                        <label>Username(不得小于2位，大于20位)</label>
                         <input type="text" class="form-control" value="<?=$this->vars['username']?>"
                                name="username" readonly="readonly" placeholder="Username" />
                     </div>
                     <div class="form-group">
-                        <label>Password</label>
+                        <label>Password(不得小于6位)</label>
                         <input type="password" class="form-control" name="userPass" placeholder="Password"/>
                     </div>
                     <div class="form-group">
-                        <label>Email address</label>
+                        <label>Email address(填写正确的邮箱地址)</label>
                         <input type="email" class="form-control" name="userEmail" placeholder="Email" />
                     </div>
                     <div class="form-group">
                         <label>等级</label>
                         <select name="roleId" class="form-control">
-                            <?php foreach ($this->vars['allLevel'] as $key => $value) : ?>
+                            <?php foreach ($this->vars['allRole'] as $key => $value) : ?>
                                 <option value="<?=$value['role_id']?>"><?=$value['role_name']?></option>
                             <?php endforeach; ?>
                         </select>

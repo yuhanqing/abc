@@ -31,7 +31,8 @@ class Manage extends Model
     //查询单个管理员
     public function getOneManage()
     {
-        $sql = "SELECT user_id,user_name,user_email,role_id FROM cms_users WHERE user_id='$this->id' LIMIT 1";
+        $sql = "SELECT user_id,user_name,user_email,role_id FROM cms_users 
+                 WHERE user_id='$this->id' OR user_name='$this->username' OR role_id='$this->id' LIMIT 1";
         return parent::one($sql);
     }
 
@@ -72,7 +73,7 @@ class Manage extends Model
     }
 
     //查询所有的等级
-    public function getAllLevel()
+    public function getAllRole()
     {
         $_sql = "SELECT role_id,role_name FROM cms_roles ORDER BY role_sort ASC";
         return parent::all($_sql);

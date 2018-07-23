@@ -10,13 +10,15 @@ namespace app\controllers;
 
 use app\models\Manage;
 use app\base\Tool;
+use app\base\Validate;
 
 class ManageController extends Controller
 {
 
     public function __construct(&$tpl)
     {
-        parent::__construct($tpl, new Manage());
+        parent::__construct($tpl);
+        $this->model = new Manage();
         $this->action();
         $this->tpl->run($this->assign, 'manage.php');
     }
@@ -52,7 +54,34 @@ class ManageController extends Controller
     private function add()
     {
         if (isset($_POST['send'])) {
+            if (Validate::checkNull($_POST['username'])) {
+                Tool::alertBack('警告：用户名不得为空！');
+            }
+            if (Validate::checkLength($_POST['username'], 2, 'min')) {
+                Tool::alertBack('警告：用户名不得小于两位！');
+            }
+            if (Validate::checkLength($_POST['username'], 20, 'max')) {
+                Tool::alertBack('警告：用户名不得大于20位！');
+            }
+            if (Validate::checkNull($_POST['userPass'])) {
+                Tool::alertBack('警告：密码不得为空！');
+            }
+            if (Validate::checkLength($_POST['userPass'], 6, 'min')) {
+                Tool::alertBack('警告：密码不得小于六位！');
+            }
+            if (Validate::checkEquals($_POST['userPass'], $_POST['checkPass'])) {
+                Tool::alertBack('警告：密码和密码确认必须一致！');
+            }
+            if (Validate::checkNull($_POST['userEmail'])) {
+                Tool::alertBack('警告：邮箱不得为空！');
+            }
+            if (Validate::checkEmail($_POST['userEmail'])) {
+                Tool::alertBack('警告：邮箱格式不正确！');
+            }
             $this->model->username  = $_POST['username'];
+            if ($this->model->getOneManage()) {
+                Tool::alertBack('警告：此用户已被占用！');
+            }
             $this->model->password  = sha1($_POST['userPass']);
             $this->model->email     = $_POST['userEmail'];
             $this->model->userLevel = $_POST['roleId'];
@@ -64,14 +93,26 @@ class ManageController extends Controller
         }
         $this->assign['add']   = true;
         $this->assign['title'] = '新增管理员';
-        $this->assign['allLevel'] = $this->model->getAllLevel();
+        $this->assign['allLevel'] = $this->model->getAllRole();
     }
 
     private function update()
     {
         if (isset($_POST['send'])) {
+            if (Validate::checkNull($_POST['userPass'])) {
+                Tool::alertBack('警告：密码不得为空！');
+            }
+            if (Validate::checkLength($_POST['userPass'], 6, 'min')) {
+                Tool::alertBack('警告：密码不得小于六位！');
+            }
+            if (Validate::checkNull($_POST['userEmail'])) {
+                Tool::alertBack('警告：邮箱不得为空！');
+            }
+            if (Validate::checkEmail($_POST['userEmail'])) {
+                Tool::alertBack('警告：邮箱格式不正确！');
+            }
             $this->model->id        = $_POST['userId'];
-            $this->model->password  = sha1($_POST['adminPass']);
+            $this->model->password  = sha1($_POST['userPass']);
             $this->model->email     = $_POST['userEmail'];
             $this->model->userLevel = $_POST['roleId'];
             $this->model->updateManage() ? Tool::alertLocation('恭喜你，修改管理员成功！', 'manage.php?action=show') :
@@ -83,10 +124,10 @@ class ManageController extends Controller
             $this->assign['userId']   = $this->model->getOneManage()['user_id'];
             $this->assign['username'] = $this->model->getOneManage()['user_name'];
             $this->assign['roleId']   = $this->model->getOneManage()['role_id'];
-            $this->assign['email']    = $this->model->getOneManage()['email'];
+            $this->assign['email']    = $this->model->getOneManage()['user_email'];
             $this->assign['update']   = true;
             $this->assign['title']    = '修改管理员';
-            $this->assign['allLevel'] = $this->model->getAllLevel();
+            $this->assign['allRole'] = $this->model->getAllRole();
         } else {
             Tool::alertBack('非法操作！');
         }

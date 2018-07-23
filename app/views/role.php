@@ -34,15 +34,15 @@
             <?php if (isset($this->vars['add'])) :?>
                 <form method="post" class="col-md-6">
                     <div class="form-group">
-                        <label>Role name</label>
+                        <label>Role name(不得少于2位,大于20位)</label>
                         <input type="text" class="form-control" name="roleName" placeholder="Role name">
                     </div>
                     <div class="form-group">
-                        <label>Role sort</label>
+                        <label>Role sort(请填写数字)</label>
                         <input type="text" class="form-control" name="roleSort" placeholder="Role sort">
                     </div>
                     <div class="form-group">
-                        <label>Description</label>
+                        <label>Description(可以不填写)</label>
                         <textarea class="form-control" name="roleDescription" placeholder="Description"></textarea>
                     </div>
                     <input type="submit" name="send" value="新增等级" class="submit btn btn-success" />
@@ -54,17 +54,17 @@
                 <form method="post" class="col-md-6">
                     <input type="hidden" value="<?=$this->vars['roleId']?>" name="roleId"/>
                     <div class="form-group">
-                        <label>Role name</label>
+                        <label>Role name(不得少于2位,大于20位)</label>
                         <input type="text" class="form-control" name="roleName"
                                value="<?=$this->vars['roleName']?>" placeholder="Role name">
                     </div>
                     <div class="form-group">
-                        <label>Role sort</label>
+                        <label>Role sort(请填写数字)</label>
                         <input type="text" class="form-control" name="roleSort"
                                value="<?=$this->vars['roleSort']?>" placeholder="Role sort">
                     </div>
                     <div class="form-group">
-                        <label>Description</label>
+                        <label>Description(可以不填写)</label>
                         <textarea class="form-control" name="roleDescription"
                                   placeholder="Description"><?=$this->vars['roleDescription']?></textarea>
                     </div>
